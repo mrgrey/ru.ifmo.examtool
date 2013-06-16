@@ -1,0 +1,31 @@
+out/
+build/
+
+# IDEA files #
+##############
+.idea/workspace.xml
+.idea/misc.xml
+.idea/uiDesigner.xml
+.idea/dataSources.xml
+.idea/FuGenConfiguration.xml
+.idea/FuGenConfigurationKL.xml
+.idea/LazySpringConfiguration.xml
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Java files #
+# ############
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
