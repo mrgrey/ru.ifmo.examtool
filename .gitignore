@@ -24,8 +24,3 @@ Thumbs.db
 # Java files #
 # ############
 *.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
