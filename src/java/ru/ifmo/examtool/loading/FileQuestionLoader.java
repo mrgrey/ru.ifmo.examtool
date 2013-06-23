@@ -38,20 +38,25 @@ public class FileQuestionLoader implements QuestionLoader {
         try (final Scanner scanner = new Scanner(questionsFile)) {
             final List<Question> loadedQuestions = new ArrayList<>();
             final StringBuilder questionTextBuilder = new StringBuilder(1000);
-            String line;
-            while ((line = scanner.next()) != null) {
+            while (scanner.hasNext()) {
+                final String line = scanner.nextLine();
                 if (line.isEmpty()) {
-                    if (questionTextBuilder.length() > 0) {
-                        final Question question = new Question(questionTextBuilder.toString());
-                        loadedQuestions.add(question);
-                        questionTextBuilder.setLength(0);
-                    }
+                    addQuestion(loadedQuestions, questionTextBuilder);
                 } else {
                     questionTextBuilder.append(line).append('\n');
                 }
             }
+            addQuestion(loadedQuestions, questionTextBuilder);
             Validate.isTrue(loadedQuestions.size() > MAX_QUESTION_QUEUE_SIZE, "not enough questions");
             return loadedQuestions;
+        }
+    }
+
+    private static void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
+        if (questionTextBuilder.length() > 0) {
+            final Question question = new Question(questionTextBuilder.toString());
+            loadedQuestions.add(question);
+            questionTextBuilder.setLength(0);
         }
     }
 
