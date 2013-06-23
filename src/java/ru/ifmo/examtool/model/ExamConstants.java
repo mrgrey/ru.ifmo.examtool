@@ -1,7 +1,7 @@
 package ru.ifmo.examtool.model;
 
 /**
- * Author: Yury Chuyko mrgrey@yandex-team.ru
+ * Author: Yury Chuyko
  * Date: 24.06.13
  */
 public final class ExamConstants {
