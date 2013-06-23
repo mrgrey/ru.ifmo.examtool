@@ -1,4 +1,4 @@
-package ru.ifmo.examtool.exam;
+package ru.ifmo.examtool.calculation;
 
 import ru.ifmo.examtool.model.Mark;
 import ru.ifmo.examtool.model.MarkCalculator;

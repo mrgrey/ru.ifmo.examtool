@@ -1,8 +1,8 @@
 package ru.ifmo.examtool.ui;
 
 import ru.ifmo.examtool.exam.ExamProvider;
-import ru.ifmo.examtool.exam.IncrementalMarkCalculator;
-import ru.ifmo.examtool.loading.FileQuestionLoader;
+import ru.ifmo.examtool.loading.QuestionLoader;
+import ru.ifmo.examtool.model.MarkCalculator;
 import ru.ifmo.examtool.model.Question;
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class ExamForm extends JDialog {
     private JTextPane questionPane;
     private JLabel markLabel;
 
-    public ExamForm(final String questionsFilePath) {
+    public ExamForm(final QuestionLoader questionLoader, final MarkCalculator markCalculator) {
         setTitle(TITLE);
         setContentPane(contentPane);
         setModal(true);
@@ -36,10 +36,7 @@ public class ExamForm extends JDialog {
 
         this.questionPane.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-        this.examProvider = new ExamProvider(
-                new FileQuestionLoader(questionsFilePath),
-                new IncrementalMarkCalculator()
-        );
+        this.examProvider = new ExamProvider(questionLoader, markCalculator);
 
         this.incorrectButton.addActionListener(answerListener(false));
         this.correctButton.addActionListener(answerListener(true));

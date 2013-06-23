@@ -1,5 +1,8 @@
 package ru.ifmo.examtool.app;
 
+import ru.ifmo.examtool.calculation.BayesMarkCalculator;
+import ru.ifmo.examtool.calculation.DeferredMarkCalculator;
+import ru.ifmo.examtool.loading.FileQuestionLoader;
 import ru.ifmo.examtool.ui.ExamForm;
 
 /**
@@ -10,7 +13,10 @@ public class Main {
 
     public static void main(String[] args) {
         checkStartupParams(args);
-        final ExamForm form = new ExamForm(args[0]);
+        final ExamForm form = new ExamForm(
+                new FileQuestionLoader(args[0]),
+                new DeferredMarkCalculator(3, new BayesMarkCalculator())
+        );
         form.pack();
         form.setVisible(true);
         System.exit(0);
