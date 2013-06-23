@@ -47,11 +47,11 @@ public class ExamProvider {
         private ExamSession(final ExamProvider examProvider) {
             this.markCalculator = examProvider.markCalculator;
 
-            final List<Question> allAllowedQuestions = new ArrayList<>(examProvider.questionLoader.loadQuestions());
+            final List<Question> allAllowedQuestions = new ArrayList<Question>(examProvider.questionLoader.loadQuestions());
             Collections.shuffle(allAllowedQuestions);
-            this.questionQueue = new LinkedList<>(allAllowedQuestions.subList(0, MAX_QUESTION_QUEUE_SIZE));
+            this.questionQueue = new LinkedList<Question>(allAllowedQuestions.subList(0, MAX_QUESTION_QUEUE_SIZE));
 
-            this.answers = new LinkedHashMap<>(questionQueue.size());
+            this.answers = new LinkedHashMap<Question, Boolean>(questionQueue.size());
 
             moveToNextQuestion();
         }

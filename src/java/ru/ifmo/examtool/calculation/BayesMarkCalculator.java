@@ -14,12 +14,12 @@ import java.util.List;
  */
 public class BayesMarkCalculator implements MarkCalculator {
 
-    private static final List<Pair<Integer, Integer>> marks = new ArrayList<>();
+    private static final List<Pair<Integer, Integer>> marks = new ArrayList<Pair<Integer, Integer>>();
 
     static {
         for (int i = 20; i >= 1; i--) {
             final int rightQuestions = i * 90 / 20;
-            marks.add(new Pair<>(i, rightQuestions));
+            marks.add(new Pair<Integer, Integer>(i, rightQuestions));
         }
     }
 

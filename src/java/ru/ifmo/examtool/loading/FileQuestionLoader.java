@@ -35,21 +35,21 @@ public class FileQuestionLoader implements QuestionLoader {
 
     private static List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
         final File questionsFile = getFile(questionsFilePath);
-        try (final Scanner scanner = new Scanner(questionsFile)) {
-            final List<Question> loadedQuestions = new ArrayList<>();
-            final StringBuilder questionTextBuilder = new StringBuilder(1000);
-            while (scanner.hasNext()) {
-                final String line = scanner.nextLine();
-                if (line.isEmpty()) {
-                    addQuestion(loadedQuestions, questionTextBuilder);
-                } else {
-                    questionTextBuilder.append(line).append('\n');
-                }
+        final Scanner scanner = new Scanner(questionsFile);
+        final List<Question> loadedQuestions = new ArrayList<Question>();
+        final StringBuilder questionTextBuilder = new StringBuilder(1000);
+        while (scanner.hasNext()) {
+            final String line = scanner.nextLine();
+            if (line.isEmpty()) {
+                addQuestion(loadedQuestions, questionTextBuilder);
+            } else {
+                questionTextBuilder.append(line).append('\n');
             }
-            addQuestion(loadedQuestions, questionTextBuilder);
-            Validate.isTrue(loadedQuestions.size() > MAX_QUESTION_QUEUE_SIZE, "not enough questions");
-            return loadedQuestions;
         }
+        addQuestion(loadedQuestions, questionTextBuilder);
+        Validate.isTrue(loadedQuestions.size() > MAX_QUESTION_QUEUE_SIZE, "not enough questions");
+        scanner.close();
+        return loadedQuestions;
     }
 
     private static void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
