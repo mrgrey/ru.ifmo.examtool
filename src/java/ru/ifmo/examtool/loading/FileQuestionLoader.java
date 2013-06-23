@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import static ru.ifmo.examtool.model.ExamConstants.MAX_QUESTION_QUEUE_SIZE;
+
 /**
  * Author: Yury Chuyko
  * Date: 23.06.13
@@ -23,8 +25,12 @@ public class FileQuestionLoader implements QuestionLoader {
     }
 
     @Override
-    public List<Question> loadQuestions() throws FileNotFoundException {
-        return Collections.unmodifiableList(readQuestions(questionsFilePath));
+    public List<Question> loadQuestions() {
+        try {
+            return Collections.unmodifiableList(readQuestions(questionsFilePath));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
@@ -44,6 +50,7 @@ public class FileQuestionLoader implements QuestionLoader {
                     questionTextBuilder.append(line).append('\n');
                 }
             }
+            Validate.isTrue(loadedQuestions.size() > MAX_QUESTION_QUEUE_SIZE, "not enough questions");
             return loadedQuestions;
         }
     }

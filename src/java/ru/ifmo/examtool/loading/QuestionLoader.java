@@ -2,7 +2,6 @@ package ru.ifmo.examtool.loading;
 
 import ru.ifmo.examtool.model.Question;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -11,6 +10,6 @@ import java.util.List;
  */
 public interface QuestionLoader {
 
-    List<Question> loadQuestions() throws IOException;
+    List<Question> loadQuestions();
 
 }
