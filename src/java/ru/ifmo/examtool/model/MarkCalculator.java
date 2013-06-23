@@ -10,8 +10,4 @@ public interface MarkCalculator {
 
     Mark calculate(Collection<Boolean> questionAnswerResults);
 
-    enum Mark {
-        UNDEFINED, _2, _3, _4, _5
-    }
-
 }
