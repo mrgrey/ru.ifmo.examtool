@@ -35,9 +35,9 @@ public class FileQuestionLoader implements QuestionLoader {
 
     private static List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
         final File questionsFile = getFile(questionsFilePath);
-        final Scanner scanner = new Scanner(questionsFile);
         final List<Question> loadedQuestions = new ArrayList<Question>();
         final StringBuilder questionTextBuilder = new StringBuilder(1000);
+        final Scanner scanner = new Scanner(questionsFile, "UTF-8");
         while (scanner.hasNext()) {
             final String line = scanner.nextLine();
             if (line.isEmpty()) {
