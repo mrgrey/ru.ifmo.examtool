@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
  */
 public class ExamForm extends JDialog {
 
-    private static final String TITLE = "Приниматор экзамена / отправлятор в армию, версия 1.0";
+    private static final String TITLE = "Приниматор экзамена";
 
     private final ExamProvider examProvider;
 
