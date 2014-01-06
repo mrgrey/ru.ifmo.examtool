@@ -1,18 +1,13 @@
 out/
 build/
+target/
+src/java/META-INF/
 
-# IDEA files #
-##############
-.idea/workspace.xml
-.idea/misc.xml
-.idea/uiDesigner.xml
-.idea/dataSources.xml
-.idea/FuGenConfiguration.xml
-.idea/FuGenConfigurationKL.xml
-.idea/LazySpringConfiguration.xml
+# IDEA files
+.idea/
+*.iml
 
 # OS generated files #
-######################
 .DS_Store
 .DS_Store?
 .Spotlight-V100
@@ -22,5 +17,9 @@ ehthumbs.db
 Thumbs.db
 
 # Java files #
-# ############
 *.class
+
+# Package Files #
+*.jar
+*.war
+*.ear

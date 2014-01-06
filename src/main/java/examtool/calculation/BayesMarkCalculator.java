@@ -1,8 +1,8 @@
-package ru.ifmo.examtool.calculation;
+package examtool.calculation;
 
-import ru.ifmo.examtool.model.Mark;
-import ru.ifmo.examtool.model.MarkCalculator;
-import ru.ifmo.examtool.util.collections.Pair;
+import examtool.model.Mark;
+import examtool.model.MarkCalculator;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +19,7 @@ public class BayesMarkCalculator implements MarkCalculator {
     static {
         for (int i = 20; i >= 1; i--) {
             final int rightQuestions = i * 90 / 20;
-            marks.add(new Pair<Integer, Integer>(i, rightQuestions));
+            marks.add(Pair.of(i, rightQuestions));
         }
     }
 
@@ -33,7 +33,7 @@ public class BayesMarkCalculator implements MarkCalculator {
 
         float sum = 0;
         for (final Pair<Integer, Integer> mark : marks) {
-            int rightAnswers = mark.second;
+            int rightAnswers = mark.getRight();
 
             float res = calcProbabilityEventForHyp(answerMask, rightAnswers);
 
@@ -43,8 +43,8 @@ public class BayesMarkCalculator implements MarkCalculator {
         float resSum = 0;
         int maxMark = 0;
         for (final Pair<Integer, Integer> mark : marks) {
-            final Integer pointCnt = mark.first;
-            int rightAnswers = mark.second;
+            final Integer pointCnt = mark.getLeft();
+            int rightAnswers = mark.getRight();
 
             float res = calcProbabilityEventForHyp(answerMask, rightAnswers) * calcHypProbability();
             resSum += (res / sum);

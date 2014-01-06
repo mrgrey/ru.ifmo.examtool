@@ -1,4 +1,4 @@
-package ru.ifmo.examtool.model;
+package examtool.model;
 
 /**
  * Author: Yury Chuyko

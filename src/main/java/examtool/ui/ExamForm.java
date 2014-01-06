@@ -1,9 +1,9 @@
-package ru.ifmo.examtool.ui;
+package examtool.ui;
 
-import ru.ifmo.examtool.exam.ExamProvider;
-import ru.ifmo.examtool.loading.QuestionLoader;
-import ru.ifmo.examtool.model.MarkCalculator;
-import ru.ifmo.examtool.model.Question;
+import examtool.exam.ExamProvider;
+import examtool.loading.QuestionLoader;
+import examtool.model.MarkCalculator;
+import examtool.model.Question;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

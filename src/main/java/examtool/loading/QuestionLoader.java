@@ -1,6 +1,6 @@
-package ru.ifmo.examtool.loading;
+package examtool.loading;
 
-import ru.ifmo.examtool.model.Question;
+import examtool.model.Question;
 
 import java.util.List;
 

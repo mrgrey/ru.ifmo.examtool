@@ -1,19 +1,13 @@
-package ru.ifmo.examtool.exam;
+package examtool.exam;
 
+import examtool.loading.QuestionLoader;
+import examtool.model.ExamConstants;
+import examtool.model.Mark;
+import examtool.model.MarkCalculator;
+import examtool.model.Question;
 import org.apache.commons.lang3.Validate;
-import ru.ifmo.examtool.loading.QuestionLoader;
-import ru.ifmo.examtool.model.Mark;
-import ru.ifmo.examtool.model.MarkCalculator;
-import ru.ifmo.examtool.model.Question;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import static ru.ifmo.examtool.model.ExamConstants.MAX_QUESTION_QUEUE_SIZE;
+import java.util.*;
 
 /**
  * Author: Yury Chuyko
@@ -49,7 +43,7 @@ public class ExamProvider {
 
             final List<Question> allAllowedQuestions = new ArrayList<Question>(examProvider.questionLoader.loadQuestions());
             Collections.shuffle(allAllowedQuestions);
-            this.questionQueue = new LinkedList<Question>(allAllowedQuestions.subList(0, MAX_QUESTION_QUEUE_SIZE));
+            this.questionQueue = new LinkedList<Question>(allAllowedQuestions.subList(0, ExamConstants.MAX_QUESTION_QUEUE_SIZE));
 
             this.answers = new LinkedHashMap<Question, Boolean>(questionQueue.size());
 

@@ -1,9 +1,9 @@
-package ru.ifmo.examtool.app;
+package examtool.app;
 
-import ru.ifmo.examtool.calculation.BayesMarkCalculator;
-import ru.ifmo.examtool.calculation.DeferredMarkCalculator;
-import ru.ifmo.examtool.loading.FileQuestionLoader;
-import ru.ifmo.examtool.ui.ExamForm;
+import examtool.calculation.BayesMarkCalculator;
+import examtool.calculation.DeferredMarkCalculator;
+import examtool.loading.FileQuestionLoader;
+import examtool.ui.ExamForm;
 
 /**
  * Author: Yury Chuyko

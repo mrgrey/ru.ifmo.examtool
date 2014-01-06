@@ -1,7 +1,7 @@
-package ru.ifmo.examtool.loading;
+package examtool.loading;
 
+import examtool.model.Question;
 import org.apache.commons.lang3.Validate;
-import ru.ifmo.examtool.model.Question;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import static ru.ifmo.examtool.model.ExamConstants.MAX_QUESTION_QUEUE_SIZE;
+import static examtool.model.ExamConstants.MAX_QUESTION_QUEUE_SIZE;
 
 /**
  * Author: Yury Chuyko
