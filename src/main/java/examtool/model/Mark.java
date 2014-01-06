@@ -1,4 +1,4 @@
-package ru.ifmo.examtool.model;
+package examtool.model;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;

@@ -1,7 +1,7 @@
-package ru.ifmo.examtool.calculation;
+package examtool.calculation;
 
-import ru.ifmo.examtool.model.Mark;
-import ru.ifmo.examtool.model.MarkCalculator;
+import examtool.model.Mark;
+import examtool.model.MarkCalculator;
 
 import java.util.Collection;
 
