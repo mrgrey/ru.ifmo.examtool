@@ -1,9 +1,11 @@
 out/
 build/
+target/
 src/java/META-INF/
 
 # IDEA files
 .idea/
+*.iml
 
 # OS generated files #
 .DS_Store
