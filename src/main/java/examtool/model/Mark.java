@@ -22,7 +22,7 @@ public final class Mark {
 
     @Override
     public boolean equals(final Object o) {
-        return EqualsBuilder.reflectionEquals(this, 0);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
