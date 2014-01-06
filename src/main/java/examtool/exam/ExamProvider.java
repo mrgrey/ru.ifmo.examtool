@@ -34,7 +34,7 @@ public class ExamProvider {
         private final MarkCalculator markCalculator;
         private final LinkedList<Question> questionQueue;
 
-        private final Map<Question, Boolean> answers;
+        private final LinkedHashMap<Question, Boolean> answers;
 
         private Question currentQuestion;
 
@@ -56,6 +56,13 @@ public class ExamProvider {
 
         public Mark currentMark() {
             return markCalculator.calculate(answers.values());
+        }
+
+        public Mark nextMark(final boolean isNextAnswerCorrect) {
+            final List<Boolean> nextAnswers = new ArrayList<Boolean>(answers.values().size() + 1);
+            nextAnswers.addAll(answers.values());
+            nextAnswers.add(isNextAnswerCorrect);
+            return markCalculator.calculate(nextAnswers);
         }
 
         public Question currentQuestion() {

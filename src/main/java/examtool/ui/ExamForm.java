@@ -9,6 +9,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static examtool.ui.HtmlRenderUtil.bold;
+import static examtool.ui.HtmlRenderUtil.content;
+import static examtool.ui.HtmlRenderUtil.line;
+
 /**
  * Author: Yury Chuyko
  * Date: 24.06.13
@@ -22,11 +26,14 @@ public class ExamForm extends JDialog {
     private ExamProvider.ExamSession examSession;
 
     private JPanel contentPane;
+
     private JButton incorrectButton;
     private JButton correctButton;
+    private JButton nextQuestionButton;
+
     private JButton nextStudentButton;
     private JTextPane questionPane;
-    private JLabel markLabel;
+    private JLabel currentMarkLabel;
 
     public ExamForm(final QuestionLoader questionLoader, final MarkCalculator markCalculator) {
         setTitle(TITLE);
@@ -40,6 +47,12 @@ public class ExamForm extends JDialog {
 
         this.incorrectButton.addActionListener(answerListener(false));
         this.correctButton.addActionListener(answerListener(true));
+        this.nextQuestionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                renderNextQuestion();
+            }
+        });
         this.nextStudentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -50,23 +63,44 @@ public class ExamForm extends JDialog {
         startNewSession();
     }
 
+    private void setButtonsVisibility(final boolean showCorrectWrongButtons) {
+        this.incorrectButton.setVisible(showCorrectWrongButtons);
+        this.correctButton.setVisible(showCorrectWrongButtons);
+        this.nextQuestionButton.setVisible(!showCorrectWrongButtons);
+    }
+
     private void startNewSession() {
         this.incorrectButton.setEnabled(true);
         this.correctButton.setEnabled(true);
         this.examSession = examProvider.newSession();
-        refresh();
+        renderNextQuestion();
     }
 
-    private void refresh() {
+    private void renderNextQuestion() {
+        setButtonsVisibility(true);
         final Question question = examSession.currentQuestion();
         if (question != null) {
-            this.questionPane.setText(question.getText());
+            this.questionPane.setText(content(question.getText()));
         } else {
-            this.questionPane.setText("===Вопросы закончились===");
+            this.questionPane.setText(content(bold("===Вопросы закончились===")));
             this.incorrectButton.setEnabled(false);
             this.correctButton.setEnabled(false);
         }
-        this.markLabel.setText(Integer.toString(examSession.currentMark().getScore()));
+    }
+
+    private void renderIntermediateScreen() {
+        setButtonsVisibility(false);
+        this.questionPane.setText(content(
+                line("На данный момент число баллов составляет: ",
+                        bold(Integer.toString(examSession.currentMark().getScore()))
+                ),
+                line("При ", bold("правильном"), " ответе на следующий вопрос число баллов составит: ",
+                        bold(Integer.toString(examSession.nextMark(true).getScore()))
+                ),
+                line("При ", bold("неправильном"), " ответе на следующий вопрос число баллов составит: ",
+                        bold(Integer.toString(examSession.nextMark(false).getScore()))
+                )
+        ));
     }
 
     private ActionListener answerListener(final boolean isAnswerCorrect) {
@@ -74,7 +108,11 @@ public class ExamForm extends JDialog {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 examSession.answer(isAnswerCorrect);
-                refresh();
+
+                final int currentScore = examSession.currentMark().getScore();
+                currentMarkLabel.setText(Integer.toString(currentScore));
+
+                renderIntermediateScreen();
             }
         };
     }
