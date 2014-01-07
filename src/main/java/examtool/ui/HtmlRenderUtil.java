@@ -1,11 +1,9 @@
 package examtool.ui;
 
-import org.apache.commons.lang3.StringUtils;
-
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
- * Author: Yury Chuyko mrgrey@yandex-team.ru
+ * Author: Yury Chuyko
  * Date: 07.01.14
  */
 public final class HtmlRenderUtil {
