@@ -2,6 +2,8 @@ package examtool.ui;
 
 import org.apache.commons.lang3.StringUtils;
 
+import static org.apache.commons.lang3.StringUtils.join;
+
 /**
  * Author: Yury Chuyko mrgrey@yandex-team.ru
  * Date: 07.01.14
@@ -12,6 +14,12 @@ public final class HtmlRenderUtil {
     }
 
     public static String content(final String... contentParts) {
+        if (contentParts.length > 0) {
+            if (contentParts[0].startsWith("<html")) {
+                return join(contentParts, "");
+            }
+        }
+
         final StringBuilder sb = new StringBuilder();
         sb.append("<html><head></head><body>");
         for (final String contentPart : contentParts) {
@@ -22,11 +30,15 @@ public final class HtmlRenderUtil {
     }
 
     public static String bold(final String... contents) {
-        return "<b>" + StringUtils.join(contents, "") + "</b>";
+        return "<b>" + join(contents, "") + "</b>";
     }
 
     public static String line(final String... contents) {
-        return StringUtils.join(contents, "") + "<br/>";
+        return join(contents, "") + "<br/>";
+    }
+
+    public static String image(final String path) {
+        return "<img href=\"file://" + path + "\"/>";
     }
 
 }

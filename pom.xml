@@ -17,11 +17,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.scilab.forge</groupId>
-            <artifactId>jlatexmath</artifactId>
-            <version>0.9.6</version> <!--todo: upgrade to 1.0.2-->
-        </dependency>
     </dependencies>
 
     <build>

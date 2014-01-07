@@ -47,8 +47,8 @@ public class FileQuestionLoader implements QuestionLoader {
             }
         }
         addQuestion(loadedQuestions, questionTextBuilder);
-        Validate.isTrue(loadedQuestions.size() > MAX_QUESTION_QUEUE_SIZE, "not enough questions");
         scanner.close();
+        Validate.isTrue(loadedQuestions.size() >= MAX_QUESTION_QUEUE_SIZE, "not enough questions");
         return loadedQuestions;
     }
 
