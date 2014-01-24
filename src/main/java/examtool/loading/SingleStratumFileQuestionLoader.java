@@ -10,30 +10,41 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import static examtool.model.ExamConstants.MAX_QUESTION_QUEUE_SIZE;
-
 /**
  * Author: Yury Chuyko
  * Date: 23.06.13
  */
-public class FileQuestionLoader implements QuestionLoader {
+public class SingleStratumFileQuestionLoader implements QuestionLoader {
 
-    private String questionsFilePath;
+    private final String questionsFilePath;
 
-    public FileQuestionLoader(final String questionsFilePath) {
+    private final QuestionTextBuilder questionTextBuilder;
+
+    private final int stratumQuestionLimit;
+
+    public SingleStratumFileQuestionLoader(final String questionsFilePath,
+                                           final QuestionTextBuilder questionTextBuilder) {
+        this(questionsFilePath, questionTextBuilder, -1);
+    }
+
+    public SingleStratumFileQuestionLoader(final String questionsFilePath,
+                                           final QuestionTextBuilder questionTextBuilder,
+                                           final int stratumQuestionLimit) {
         this.questionsFilePath = questionsFilePath;
+        this.questionTextBuilder = questionTextBuilder;
+        this.stratumQuestionLimit = stratumQuestionLimit;
     }
 
     @Override
-    public List<Question> loadQuestions() {
+    public List<StratumEntry> loadQuestions() {
         try {
-            return Collections.unmodifiableList(readQuestions(questionsFilePath));
+            return Collections.singletonList(readQuestions(questionsFilePath));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
+    private StratumEntry readQuestions(final String questionsFilePath) throws FileNotFoundException {
         final File questionsFile = getFile(questionsFilePath);
         final List<Question> loadedQuestions = new ArrayList<Question>();
         final StringBuilder questionTextBuilder = new StringBuilder(1000);
@@ -48,8 +59,10 @@ public class FileQuestionLoader implements QuestionLoader {
         }
         addQuestion(loadedQuestions, questionTextBuilder);
         scanner.close();
-        Validate.isTrue(loadedQuestions.size() >= MAX_QUESTION_QUEUE_SIZE, "not enough questions");
-        return loadedQuestions;
+        return new StratumEntry(
+                new Stratum(loadedQuestions),
+                stratumQuestionLimit > 0 ? stratumQuestionLimit : loadedQuestions.size()
+        );
     }
 
     private void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
@@ -61,7 +74,7 @@ public class FileQuestionLoader implements QuestionLoader {
     }
 
     protected Question buildQuestion(final String questionText) {
-        return new Question(questionText);
+        return questionTextBuilder.buildQuestion(questionText);
     }
 
     private static File getFile(final String questionsFilePath) {

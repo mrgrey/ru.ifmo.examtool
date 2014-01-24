@@ -36,7 +36,7 @@ public final class HtmlRenderUtil {
     }
 
     public static String image(final String path) {
-        return "<img href=\"file://" + path + "\"/>";
+        return "<img src=\"file://" + path + "\"/>";
     }
 
 }
