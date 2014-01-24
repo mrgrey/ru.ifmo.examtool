@@ -6,12 +6,11 @@ import examtool.model.MarkCalculator;
 import examtool.model.Question;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static examtool.ui.HtmlRenderUtil.bold;
-import static examtool.ui.HtmlRenderUtil.content;
-import static examtool.ui.HtmlRenderUtil.line;
+import static examtool.ui.HtmlRenderUtil.*;
 
 /**
  * Author: Yury Chuyko
@@ -38,6 +37,7 @@ public class ExamForm extends JDialog {
     public ExamForm(final QuestionLoader questionLoader, final MarkCalculator markCalculator) {
         setTitle(TITLE);
         setContentPane(contentPane);
+        setPreferredSize(new Dimension(800, 600));
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

@@ -33,7 +33,7 @@ public class FileQuestionLoader implements QuestionLoader {
         }
     }
 
-    private static List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
+    private List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
         final File questionsFile = getFile(questionsFilePath);
         final List<Question> loadedQuestions = new ArrayList<Question>();
         final StringBuilder questionTextBuilder = new StringBuilder(1000);
@@ -52,12 +52,16 @@ public class FileQuestionLoader implements QuestionLoader {
         return loadedQuestions;
     }
 
-    private static void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
+    private void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
         if (questionTextBuilder.length() > 0) {
-            final Question question = new Question(questionTextBuilder.toString());
+            final Question question = buildQuestion(questionTextBuilder.toString());
             loadedQuestions.add(question);
             questionTextBuilder.setLength(0);
         }
+    }
+
+    protected Question buildQuestion(final String questionText) {
+        return new Question(questionText);
     }
 
     private static File getFile(final String questionsFilePath) {

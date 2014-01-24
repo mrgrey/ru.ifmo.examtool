@@ -2,7 +2,7 @@ package examtool.app;
 
 import examtool.calculation.BayesMarkCalculator;
 import examtool.calculation.DeferredMarkCalculator;
-import examtool.loading.FileQuestionLoader;
+import examtool.loading.FileQuestionWithImagesLoader;
 import examtool.ui.ExamForm;
 
 /**
@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         checkStartupParams(args);
         final ExamForm form = new ExamForm(
-                new FileQuestionLoader(args[0]),
+                new FileQuestionWithImagesLoader(args[0]),
                 new DeferredMarkCalculator(3, new BayesMarkCalculator())
         );
         form.pack();
