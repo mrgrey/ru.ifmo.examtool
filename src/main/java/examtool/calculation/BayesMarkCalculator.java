@@ -24,7 +24,7 @@ public class BayesMarkCalculator implements MarkCalculator {
     }
 
     @Override
-    public Mark calculate(final Collection<Boolean> questionAnswerResults) {
+    public Mark calculate(final List<Boolean> questionAnswerResults) {
         final int score = calcProbabilityByBayes(marks, questionAnswerResults);
         return new Mark(score);
     }

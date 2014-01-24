@@ -1,6 +1,6 @@
 package examtool.model;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Author: Yury Chuyko
@@ -8,6 +8,6 @@ import java.util.Collection;
  */
 public interface MarkCalculator {
 
-    Mark calculate(Collection<Boolean> questionAnswerResults);
+    Mark calculate(List<Boolean> questionAnswerResults);
 
 }

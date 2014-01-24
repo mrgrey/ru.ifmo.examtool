@@ -6,7 +6,10 @@ import examtool.model.MarkCalculator;
 import examtool.model.Question;
 import org.apache.commons.lang3.Validate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Author: Yury Chuyko
@@ -33,7 +36,7 @@ public class ExamProvider {
         private final MarkCalculator markCalculator;
         private final LinkedList<Question> questionQueue;
 
-        private final LinkedHashMap<Question, Boolean> answers;
+        private final List<Boolean> answersMask;
 
         private Question currentQuestion;
 
@@ -44,7 +47,7 @@ public class ExamProvider {
 
             this.questionQueue = new LinkedList<Question>(questions);
 
-            this.answers = new LinkedHashMap<Question, Boolean>(questionQueue.size());
+            this.answersMask = new LinkedList<Boolean>();
 
             moveToNextQuestion();
         }
@@ -64,12 +67,12 @@ public class ExamProvider {
         }
 
         public Mark currentMark() {
-            return markCalculator.calculate(answers.values());
+            return markCalculator.calculate(answersMask);
         }
 
         public Mark nextMark(final boolean isNextAnswerCorrect) {
-            final List<Boolean> nextAnswers = new ArrayList<Boolean>(answers.values().size() + 1);
-            nextAnswers.addAll(answers.values());
+            final List<Boolean> nextAnswers = new ArrayList<Boolean>(answersMask.size() + 1);
+            nextAnswers.addAll(answersMask);
             nextAnswers.add(isNextAnswerCorrect);
             return markCalculator.calculate(nextAnswers);
         }
@@ -80,7 +83,7 @@ public class ExamProvider {
 
         public void answer(final boolean isAnswerCorrect) {
             Validate.notNull(currentQuestion, "current question is null");
-            answers.put(currentQuestion, isAnswerCorrect);
+            answersMask.add(isAnswerCorrect);
             moveToNextQuestion();
         }
     }

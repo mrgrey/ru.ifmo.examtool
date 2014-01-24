@@ -3,7 +3,7 @@ package examtool.calculation;
 import examtool.model.Mark;
 import examtool.model.MarkCalculator;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Author: Yury Chuyko
@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public class IncrementalMarkCalculator implements MarkCalculator {
     @Override
-    public Mark calculate(final Collection<Boolean> questionAnswerResults) {
+    public Mark calculate(final List<Boolean> questionAnswerResults) {
         int score = 0;
         for (final Boolean answer : questionAnswerResults) {
             if (answer) {

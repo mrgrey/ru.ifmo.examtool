@@ -3,7 +3,7 @@ package examtool.calculation;
 import examtool.model.Mark;
 import examtool.model.MarkCalculator;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Author: Yury Chuyko
@@ -21,7 +21,7 @@ public class DeferredMarkCalculator implements MarkCalculator {
     }
 
     @Override
-    public Mark calculate(final Collection<Boolean> questionAnswerResults) {
+    public Mark calculate(final List<Boolean> questionAnswerResults) {
         if (questionAnswerResults.size() < startCalculationAfter) {
             return new Mark(0);
         } else {
