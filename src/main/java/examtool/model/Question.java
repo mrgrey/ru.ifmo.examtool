@@ -1,8 +1,5 @@
 package examtool.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
 * Author: Yury Chuyko
 * Date: 23.06.13
@@ -19,12 +16,19 @@ public final class Question {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Question question = (Question) o;
+
+        if (text != null ? !text.equals(question.text) : question.text != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return text != null ? text.hashCode() : 0;
     }
 }

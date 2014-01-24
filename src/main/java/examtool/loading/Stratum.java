@@ -11,14 +11,25 @@ import java.util.List;
 * Date: 24.01.14
 */
 public final class Stratum {
-    private final List<Question> questions;
 
-    public List<Question> getQuestions() {
-        return Collections.unmodifiableList(questions);
-    }
+    private final List<Question> questions;
 
     public Stratum(final List<Question> questions) {
         this.questions = new ArrayList<Question>(questions);
+    }
+
+    public List<Question> takeRandom(final int count) {
+        if (questions.size() < count) {
+            throw new IllegalArgumentException("Requested too much question from stratum");
+        }
+
+        final List<Question> questionsCopy = new ArrayList<Question>(questions);
+        Collections.shuffle(questionsCopy);
+        return questionsCopy.subList(0, count);
+    }
+
+    public List<Question> takeAll() {
+        return Collections.unmodifiableList(questions);
     }
 
     @Override
@@ -28,7 +39,8 @@ public final class Stratum {
 
         Stratum stratum = (Stratum) o;
 
-        return questions.equals(stratum.getQuestions());
+        return questions.equals(stratum.questions);
+
     }
 
     @Override

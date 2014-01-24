@@ -1,5 +1,7 @@
 package examtool.loading;
 
+import examtool.model.Question;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,28 @@ import java.util.List;
  */
 public interface QuestionLoader {
 
-    List<Stratum> loadQuestions();
+    List<StratumEntry> loadQuestions();
+
+    public final class StratumEntry {
+        private final Stratum stratum;
+        private final int shouldTakeQuestionsCount;
+
+        public Stratum getStratum() {
+            return stratum;
+        }
+
+        public int getShouldTakeQuestionsCount() {
+            return shouldTakeQuestionsCount;
+        }
+
+        public List<Question> getQuestions() {
+            return stratum.takeRandom(getShouldTakeQuestionsCount());
+        }
+
+        public StratumEntry(final Stratum stratum, final int shouldTakeQuestionsCount) {
+            this.stratum = stratum;
+            this.shouldTakeQuestionsCount = shouldTakeQuestionsCount;
+        }
+    }
 
 }

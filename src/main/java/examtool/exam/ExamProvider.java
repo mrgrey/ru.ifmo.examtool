@@ -1,8 +1,6 @@
 package examtool.exam;
 
 import examtool.loading.QuestionLoader;
-import examtool.loading.Stratum;
-import examtool.model.ExamConstants;
 import examtool.model.Mark;
 import examtool.model.MarkCalculator;
 import examtool.model.Question;
@@ -42,19 +40,23 @@ public class ExamProvider {
         private ExamSession(final ExamProvider examProvider) {
             this.markCalculator = examProvider.markCalculator;
 
-            final List<Stratum> questionStratums = examProvider.questionLoader.loadQuestions();
-            final List<Question> questions = new ArrayList<Question>();
-            for (final Stratum stratum : questionStratums) {
-                questions.addAll(stratum.getQuestions());
-            }
+            final List<Question> questions = getQuestionsForSession(examProvider);
 
-            final List<Question> allAllowedQuestions = new ArrayList<Question>(questions);
-            Collections.shuffle(allAllowedQuestions);
-            this.questionQueue = new LinkedList<Question>(allAllowedQuestions.subList(0, ExamConstants.MAX_QUESTION_QUEUE_SIZE));
+            this.questionQueue = new LinkedList<Question>(questions);
 
             this.answers = new LinkedHashMap<Question, Boolean>(questionQueue.size());
 
             moveToNextQuestion();
+        }
+
+        private List<Question> getQuestionsForSession(ExamProvider examProvider) {
+            final List<QuestionLoader.StratumEntry> questionStratums = examProvider.questionLoader.loadQuestions();
+            final List<Question> questions = new ArrayList<Question>();
+            for (final QuestionLoader.StratumEntry stratum : questionStratums) {
+                questions.addAll(stratum.getQuestions());
+            }
+            Collections.shuffle(questions);
+            return questions;
         }
 
         private void moveToNextQuestion() {
