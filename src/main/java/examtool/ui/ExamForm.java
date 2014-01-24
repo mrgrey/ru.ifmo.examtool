@@ -91,6 +91,9 @@ public class ExamForm extends JDialog {
     private void renderIntermediateScreen() {
         setButtonsVisibility(false);
         this.questionPane.setText(content(
+                line("Пройдено вопросов: ",
+                        bold(Integer.toString(examSession.answeredQuestionsCount()) + getAnswersMask(examSession))
+                ),
                 line("На данный момент число баллов составляет: ",
                         bold(Integer.toString(examSession.currentMark().getScore()))
                 ),
@@ -101,6 +104,16 @@ public class ExamForm extends JDialog {
                         bold(Integer.toString(examSession.nextMark(false).getScore()))
                 )
         ));
+    }
+
+    private String getAnswersMask(final ExamProvider.ExamSession session) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(" ( ");
+        for (Boolean answer : session.getAnswersMask()) {
+            sb.append(answer ? "+ " : "- ");
+        }
+        sb.append(")");
+        return sb.toString();
     }
 
     private ActionListener answerListener(final boolean isAnswerCorrect) {

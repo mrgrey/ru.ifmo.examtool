@@ -1,6 +1,6 @@
 package examtool.app;
 
-import examtool.calculation.BayesMarkCalculator;
+import examtool.calculation.Bayes2MarkCalculator;
 import examtool.calculation.DeferredMarkCalculator;
 import examtool.loading.MultipleStratumQuestionLoader;
 import examtool.loading.QuestionWithImageTextBuilder;
@@ -19,7 +19,7 @@ public class Main {
                 new MultipleStratumQuestionLoader(configFilePath,
                         new QuestionWithImageTextBuilder(configFilePath)
                 ),
-                new DeferredMarkCalculator(3, new BayesMarkCalculator())
+                new DeferredMarkCalculator(5, new Bayes2MarkCalculator())
         );
         form.pack();
         form.setVisible(true);

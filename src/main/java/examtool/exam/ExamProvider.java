@@ -86,5 +86,13 @@ public class ExamProvider {
             answersMask.add(isAnswerCorrect);
             moveToNextQuestion();
         }
+
+        public int answeredQuestionsCount() {
+            return answersMask.size();
+        }
+
+        public List<Boolean> getAnswersMask() {
+            return Collections.unmodifiableList(answersMask);
+        }
     }
 }
