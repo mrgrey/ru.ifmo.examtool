@@ -1,6 +1,7 @@
 package examtool.exam;
 
 import examtool.loading.QuestionLoader;
+import examtool.loading.Stratum;
 import examtool.model.ExamConstants;
 import examtool.model.Mark;
 import examtool.model.MarkCalculator;
@@ -41,7 +42,13 @@ public class ExamProvider {
         private ExamSession(final ExamProvider examProvider) {
             this.markCalculator = examProvider.markCalculator;
 
-            final List<Question> allAllowedQuestions = new ArrayList<Question>(examProvider.questionLoader.loadQuestions());
+            final List<Stratum> questionStratums = examProvider.questionLoader.loadQuestions();
+            final List<Question> questions = new ArrayList<Question>();
+            for (final Stratum stratum : questionStratums) {
+                questions.addAll(stratum.getQuestions());
+            }
+
+            final List<Question> allAllowedQuestions = new ArrayList<Question>(questions);
             Collections.shuffle(allAllowedQuestions);
             this.questionQueue = new LinkedList<Question>(allAllowedQuestions.subList(0, ExamConstants.MAX_QUESTION_QUEUE_SIZE));
 

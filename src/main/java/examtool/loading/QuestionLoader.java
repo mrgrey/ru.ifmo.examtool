@@ -1,7 +1,5 @@
 package examtool.loading;
 
-import examtool.model.Question;
-
 import java.util.List;
 
 /**
@@ -10,6 +8,6 @@ import java.util.List;
  */
 public interface QuestionLoader {
 
-    List<Question> loadQuestions();
+    List<Stratum> loadQuestions();
 
 }

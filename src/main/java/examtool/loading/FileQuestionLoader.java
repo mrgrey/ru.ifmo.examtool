@@ -18,14 +18,18 @@ import static examtool.model.ExamConstants.MAX_QUESTION_QUEUE_SIZE;
  */
 public class FileQuestionLoader implements QuestionLoader {
 
-    private String questionsFilePath;
+    private final String questionsFilePath;
 
-    public FileQuestionLoader(final String questionsFilePath) {
+    private final QuestionTextBuilder questionTextBuilder;
+
+    public FileQuestionLoader(final String questionsFilePath,
+                              final QuestionTextBuilder questionTextBuilder) {
         this.questionsFilePath = questionsFilePath;
+        this.questionTextBuilder = questionTextBuilder;
     }
 
     @Override
-    public List<Question> loadQuestions() {
+    public List<Stratum> loadQuestions() {
         try {
             return Collections.unmodifiableList(readQuestions(questionsFilePath));
         } catch (FileNotFoundException e) {
@@ -33,7 +37,7 @@ public class FileQuestionLoader implements QuestionLoader {
         }
     }
 
-    private List<Question> readQuestions(final String questionsFilePath) throws FileNotFoundException {
+    private List<Stratum> readQuestions(final String questionsFilePath) throws FileNotFoundException {
         final File questionsFile = getFile(questionsFilePath);
         final List<Question> loadedQuestions = new ArrayList<Question>();
         final StringBuilder questionTextBuilder = new StringBuilder(1000);
@@ -49,7 +53,7 @@ public class FileQuestionLoader implements QuestionLoader {
         addQuestion(loadedQuestions, questionTextBuilder);
         scanner.close();
         Validate.isTrue(loadedQuestions.size() >= MAX_QUESTION_QUEUE_SIZE, "not enough questions");
-        return loadedQuestions;
+        return Collections.singletonList(new Stratum(loadedQuestions));
     }
 
     private void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
@@ -61,7 +65,7 @@ public class FileQuestionLoader implements QuestionLoader {
     }
 
     protected Question buildQuestion(final String questionText) {
-        return new Question(questionText);
+        return questionTextBuilder.buildQuestion(questionText);
     }
 
     private static File getFile(final String questionsFilePath) {
