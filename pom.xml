@@ -41,7 +41,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>examtool.app.MainClass</mainClass>
+                            <mainClass>examtool.app.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
