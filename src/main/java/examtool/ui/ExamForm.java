@@ -42,6 +42,7 @@ public class ExamForm extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         this.questionPane.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        this.questionPane.setDragEnabled(false);
 
         this.examProvider = new ExamProvider(questionLoader, markCalculator);
 
