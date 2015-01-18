@@ -179,7 +179,7 @@ public class ExamFrame extends JFrame {
         questionsPane.setText(content(
                 line("Добрый день! Я — приниматор экзамена, и я рад приветствовать вас."),
                 line(),
-                line("К сегодня я подготовил ", bold("" + examSettings.getAllQuestionsCnt()),
+                line("К сегодняшнему дню я подготовил ", bold("" + examSettings.getAllQuestionsCnt()),
                         " различных вопросов, и уже выбрал для вас ", bold("" +
                         examSettings.getQuestionsSampleSize()), " из них."),
                 line(),
