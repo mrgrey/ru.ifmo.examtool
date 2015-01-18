@@ -7,13 +7,14 @@ import examtool.loading.FromFilesExamSettingsProvider;
 import examtool.loading.MultipleStratumQuestionLoader;
 import examtool.loading.QuestionWithImageTextBuilder;
 import examtool.model.ExamSettings;
-import examtool.ui.ExamForm;
+import examtool.ui2.ExamFrame;
 
 /**
- * Author: Yury Chuyko
- * Date: 24.06.13
+ * Created by Olga Bolshakova (obolshakova@yandex-team.ru)
+ * <p/>
+ * 17.01.15 21:57
  */
-public class Main {
+public class Main2 {
 
     public static void main(String[] args) {
         checkStartupParams(args);
@@ -25,15 +26,15 @@ public class Main {
 
         final ExamSettings settings = settingsProvider.getSettings();
 
-        final ExamForm form = new ExamForm(
+        final ExamFrame form = new ExamFrame(
                 new MultipleStratumQuestionLoader(configFilePath,
                         new QuestionWithImageTextBuilder(configFilePath)
                 ),
-                new DeferredMarkCalculator(5, new Bayes2MarkCalculator(settings))
+                new DeferredMarkCalculator(settings.getMinQuestionsCnt(), new Bayes2MarkCalculator(settings)),
+                settings
         );
         form.pack();
         form.setVisible(true);
-        System.exit(0);
     }
 
     private static void checkStartupParams(final String[] args) {
@@ -42,5 +43,4 @@ public class Main {
             System.exit(1);
         }
     }
-
 }

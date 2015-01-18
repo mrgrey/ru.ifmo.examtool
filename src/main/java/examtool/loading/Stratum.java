@@ -23,13 +23,8 @@ public final class Stratum {
             throw new IllegalArgumentException("Requested too much question from stratum");
         }
 
-        final List<Question> questionsCopy = new ArrayList<Question>(questions);
-        Collections.shuffle(questionsCopy);
-        return questionsCopy.subList(0, count);
-    }
-
-    public List<Question> takeAll() {
-        return Collections.unmodifiableList(questions);
+        Collections.shuffle(questions);
+        return questions.subList(0, count);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class SingleStratumFileQuestionLoader implements QuestionLoader {
         scanner.close();
         return new StratumEntry(
                 new Stratum(loadedQuestions),
-                stratumQuestionLimit > 0 ? stratumQuestionLimit : loadedQuestions.size()
+                stratumQuestionLimit
         );
     }
 

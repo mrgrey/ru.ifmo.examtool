@@ -1,6 +1,5 @@
 package examtool.model;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -16,7 +15,7 @@ public final class Mark {
     }
 
     public Mark(final int score) {
-        Validate.inclusiveBetween(0, 20, score, "invalid score: " + score);
+//        Validate.inclusiveBetween(0, 20, score, "invalid score: " + score);
         this.score = score;
     }
 

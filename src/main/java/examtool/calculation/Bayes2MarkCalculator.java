@@ -1,5 +1,6 @@
 package examtool.calculation;
 
+import examtool.model.ExamSettings;
 import examtool.model.Mark;
 import examtool.model.MarkCalculator;
 
@@ -14,11 +15,18 @@ import java.util.Map;
  */
 public class Bayes2MarkCalculator implements MarkCalculator {
 
+    private final ExamSettings examSettings;
+
+    public Bayes2MarkCalculator(final ExamSettings examSettings) {
+        this.examSettings = examSettings;
+    }
+
     @Override
     public Mark calculate(final List<Boolean> questionAnswerResults) {
-        final int allQuestionsCnt = 100;
-        final int maxPointCnt = 20;
-        final int percentForMaxPoint = 90;
+        final int allQuestionsCnt = examSettings.getAllQuestionsCnt();
+        final int maxPointCnt = examSettings.getMaxPointCnt();
+        final int percentForMaxPoint = examSettings.getPercentForMaxPoint();
+        final int minProbabilityForPoint = examSettings.getMinProbabilityForPoint();
 
         final Map<Integer, Integer> pointToFinal = getPointToFinal(allQuestionsCnt, percentForMaxPoint, maxPointCnt);
 
@@ -46,7 +54,7 @@ public class Bayes2MarkCalculator implements MarkCalculator {
         }
 
         for (int i = maxPointCnt; i >= 1; i--) {
-            if (Math.round(pointToProbability.get(i) * 100) >= 80) {
+            if (Math.round(pointToProbability.get(i) * 100) >= minProbabilityForPoint) {
                 return new Mark(i);
             }
         }
@@ -55,7 +63,7 @@ public class Bayes2MarkCalculator implements MarkCalculator {
     }
 
     public float calculateProbabilityDirect(final int allQuestionsCnt, final int knownAnswersPercent, final List<Boolean> answerMask) {
-        int goodAnswersCnt = Math.round((float) allQuestionsCnt * knownAnswersPercent / 100);
+        int goodAnswersCnt = knownAnswersPercent;
         int badAnswersCnt = allQuestionsCnt - goodAnswersCnt;
         int allCnt = allQuestionsCnt;
 
@@ -74,7 +82,7 @@ public class Bayes2MarkCalculator implements MarkCalculator {
     private Map<Integer, Integer> getPointToFinal(final int allQuestionsCnt, final int percentForMaxPoint, final int maxPointCnt) {
         final Map<Integer, Integer> pointToFinal = new HashMap<Integer, Integer>();
         for (int i = allQuestionsCnt; i > 0; i--) {
-            int pointCnt = Math.round((float) i * maxPointCnt / percentForMaxPoint);
+            int pointCnt = Math.round((float) i * maxPointCnt * 100 / percentForMaxPoint / allQuestionsCnt);
             pointToFinal.put(i, Math.min(pointCnt, maxPointCnt));
         }
         return pointToFinal;

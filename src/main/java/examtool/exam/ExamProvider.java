@@ -77,8 +77,25 @@ public class ExamProvider {
             return markCalculator.calculate(nextAnswers);
         }
 
+        public Mark maxMark(final boolean isNextAnswerCorrect) {
+            final List<Boolean> nextAnswers = new ArrayList<Boolean>(questionQueue.size());
+            nextAnswers.addAll(answersMask);
+            for (int i = 0; i <= questionQueue.size(); i++) {
+                nextAnswers.add(isNextAnswerCorrect);
+            }
+            return markCalculator.calculate(nextAnswers);
+        }
+
         public Question currentQuestion() {
             return currentQuestion;
+        }
+
+        public boolean isFinished() {
+            return currentQuestion == null;
+        }
+
+        public boolean isFinishedAheadOfTime() {
+            return currentMark().getScore() == maxMark(true).getScore();
         }
 
         public void answer(final boolean isAnswerCorrect) {

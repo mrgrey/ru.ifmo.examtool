@@ -19,7 +19,7 @@ public final class HtmlRenderUtil {
         }
 
         final StringBuilder sb = new StringBuilder();
-        sb.append("<html><head></head><body>");
+        sb.append("<html><head></head><body style=\"font-size:20px\">");
         for (final String contentPart : contentParts) {
             sb.append(contentPart);
         }
