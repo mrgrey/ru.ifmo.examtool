@@ -28,7 +28,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>examtool.app.Main</mainClass>
+                            <mainClass>examtool.app.Main2</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -41,7 +41,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>examtool.app.Main</mainClass>
+                            <mainClass>examtool.app.Main2</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
