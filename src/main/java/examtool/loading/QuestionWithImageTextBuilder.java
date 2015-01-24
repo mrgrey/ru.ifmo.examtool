@@ -30,14 +30,17 @@ public class QuestionWithImageTextBuilder implements QuestionTextBuilder {
     }
 
     @Override
-    public Question buildQuestion(final String rawQuestionText) {
-        final Matcher imageMatcher = IMAGE_PATTERN.matcher(rawQuestionText);
+    public Question buildQuestion(final String rawQuestionText, final String rawAnswerText) {
+        return new Question(convertText(rawQuestionText), convertText(rawAnswerText));
+    }
+
+    private String convertText(final String source) {
+        final Matcher imageMatcher = IMAGE_PATTERN.matcher(source);
         if (imageMatcher.find()) {
             final String imageTagReplacement = HtmlRenderUtil.image(questionDirBaseName + "/" + imageDirName + "/$1");
-            final String questionTextWithImages = imageMatcher.replaceAll(imageTagReplacement);
-            return new Question(questionTextWithImages);
+            return imageMatcher.replaceAll(imageTagReplacement);
         } else {
-            return new Question(rawQuestionText);
+            return source;
         }
     }
 }

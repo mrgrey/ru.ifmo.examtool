@@ -4,10 +4,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Author: Yury Chuyko
@@ -16,19 +13,36 @@ import java.util.Scanner;
 public class MultipleStratumQuestionLoader implements QuestionLoader {
 
     private final String configFilePath;
+    private final String answersFilePath;
 
     private final QuestionTextBuilder questionTextBuilder;
 
     public MultipleStratumQuestionLoader(final String configFilePath,
+                                         final String answersFilePath,
                                          final QuestionTextBuilder questionTextBuilder) {
         this.configFilePath = configFilePath;
+        this.answersFilePath = answersFilePath;
         this.questionTextBuilder = questionTextBuilder;
+    }
+
+    private Map<String, String> loadAnswers() {
+        final NumberedTextLoader textLoader = new SimpleNumberedTextLoader(answersFilePath);
+        final List<NumberedTextLoader.NumberedText> numberedItems = textLoader.loadText();
+
+        final Map<String, String> answers = new HashMap<String, String>();
+        for (NumberedTextLoader.NumberedText numberedItem : numberedItems) {
+            answers.put(numberedItem.number, numberedItem.text);
+        }
+
+        return answers;
     }
 
     @Override
     public List<StratumEntry> loadQuestions() {
         final File configFile = new File(configFilePath);
         Validate.isTrue(configFile.canRead(), "can not read config file: " + configFilePath);
+
+        final Map<String, String> questionNumberToAnswer = loadAnswers();
 
         Scanner scanner = null;
         try {
@@ -47,7 +61,7 @@ public class MultipleStratumQuestionLoader implements QuestionLoader {
                 final int shouldTakeFromStratum = Integer.parseInt(parts[1]);
 
                 final SingleStratumFileQuestionLoader loader =
-                        new SingleStratumFileQuestionLoader(questionsFilePath, questionTextBuilder, shouldTakeFromStratum);
+                        new SingleStratumFileQuestionLoader(questionsFilePath, questionTextBuilder, questionNumberToAnswer, shouldTakeFromStratum);
 
                 out.add(loader.loadQuestions().get(0));
             }

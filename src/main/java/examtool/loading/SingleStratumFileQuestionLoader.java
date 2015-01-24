@@ -1,14 +1,9 @@
 package examtool.loading;
 
 import examtool.model.Question;
-import org.apache.commons.lang3.Validate;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Author: Yury Chuyko
@@ -22,16 +17,21 @@ public class SingleStratumFileQuestionLoader implements QuestionLoader {
 
     private final int stratumQuestionLimit;
 
+    private final Map<String, String> questionNumberToAnswer;
+
     public SingleStratumFileQuestionLoader(final String questionsFilePath,
-                                           final QuestionTextBuilder questionTextBuilder) {
-        this(questionsFilePath, questionTextBuilder, -1);
+                                           final QuestionTextBuilder questionTextBuilder,
+                                           final Map<String, String> questionNumberToAnswer) {
+        this(questionsFilePath, questionTextBuilder, questionNumberToAnswer, -1);
     }
 
     public SingleStratumFileQuestionLoader(final String questionsFilePath,
                                            final QuestionTextBuilder questionTextBuilder,
+                                           final Map<String, String> questionNumberToAnswer,
                                            final int stratumQuestionLimit) {
         this.questionsFilePath = questionsFilePath;
         this.questionTextBuilder = questionTextBuilder;
+        this.questionNumberToAnswer = questionNumberToAnswer;
         this.stratumQuestionLimit = stratumQuestionLimit;
     }
 
@@ -45,41 +45,25 @@ public class SingleStratumFileQuestionLoader implements QuestionLoader {
     }
 
     private StratumEntry readQuestions(final String questionsFilePath) throws FileNotFoundException {
-        final File questionsFile = getFile(questionsFilePath);
+        final NumberedTextLoader textLoader = new SimpleNumberedTextLoader(questionsFilePath);
+        final List<NumberedTextLoader.NumberedText> numberedItems = textLoader.loadText();
+
         final List<Question> loadedQuestions = new ArrayList<Question>();
-        final StringBuilder questionTextBuilder = new StringBuilder(1000);
-        final Scanner scanner = new Scanner(questionsFile, "UTF-8");
-        while (scanner.hasNext()) {
-            final String line = scanner.nextLine();
-            if (line.isEmpty()) {
-                addQuestion(loadedQuestions, questionTextBuilder);
-            } else {
-                questionTextBuilder.append(line).append('\n');
-            }
+
+        for (NumberedTextLoader.NumberedText numberedItem : numberedItems) {
+            loadedQuestions.add(buildQuestion(numberedItem));
         }
-        addQuestion(loadedQuestions, questionTextBuilder);
-        scanner.close();
+
         return new StratumEntry(
                 new Stratum(loadedQuestions),
                 stratumQuestionLimit
         );
     }
 
-    private void addQuestion(final List<Question> loadedQuestions, final StringBuilder questionTextBuilder) {
-        if (questionTextBuilder.length() > 0) {
-            final Question question = buildQuestion(questionTextBuilder.toString());
-            loadedQuestions.add(question);
-            questionTextBuilder.setLength(0);
-        }
-    }
+    protected Question buildQuestion(final NumberedTextLoader.NumberedText item) {
+        final String number = item.number;
+        final String answer = questionNumberToAnswer.get(number);
 
-    protected Question buildQuestion(final String questionText) {
-        return questionTextBuilder.buildQuestion(questionText);
-    }
-
-    private static File getFile(final String questionsFilePath) {
-        final File questionsFile = new File(questionsFilePath);
-        Validate.isTrue(questionsFile.canRead(), "can not read file " + questionsFile);
-        return questionsFile;
+        return questionTextBuilder.buildQuestion(item.text, answer == null ? "???" : answer);
     }
 }

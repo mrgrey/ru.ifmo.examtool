@@ -1,6 +1,6 @@
 package examtool.ui2;
 
-import examtool.exam.ExamProvider;
+import examtool.exam.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +10,9 @@ import java.awt.*;
  * <p/>
  * 18.01.15 0:51
  */
-public class ScorePane extends JPanel {
+public class ScorePane extends JPanel implements ExamSessionObserver {
 
-    private ExamProvider.ExamSession examSession;
+    private ObservableExamSession examSession;
 
     private final JLabel minScore;
     private final JLabel maxScore;
@@ -20,9 +20,20 @@ public class ScorePane extends JPanel {
     private final JLabel prevScore;
     private final JLabel curScore;
 
-    public void setExamSession(final ExamProvider.ExamSession examSession) {
+    public void setModel(final ObservableExamSession examSession) {
         this.examSession = examSession;
-        restart();
+        examSession.registerObserver(this);
+    }
+
+    @Override
+    public void sessionChanged() {
+        final SessionState state = examSession.getState();
+        if (state == SessionState.NEW) {
+            restart();
+        } else if (state == SessionState.QUESTION_ANSWERED
+                || state == SessionState.FINISHED) {
+            updateValues();
+        }
     }
 
     public ScorePane() {
@@ -52,12 +63,13 @@ public class ScorePane extends JPanel {
         add(maxScore);
     }
 
-    public void updateValues() {
-        curScore.setText("" + examSession.currentMark().getScore());
-        nextScore.setText("" + examSession.nextMark(true).getScore());
-        prevScore.setText("" + examSession.nextMark(false).getScore());
-        minScore.setText("" + examSession.maxMark(false).getScore());
-        maxScore.setText("" + examSession.maxMark(true).getScore());
+    private void updateValues() {
+        final SessionMark sessionMark = examSession.getMark();
+        curScore.setText("" + sessionMark.currentMark().getScore());
+        nextScore.setText("" + sessionMark.nextMark(true).getScore());
+        prevScore.setText("" + sessionMark.nextMark(false).getScore());
+        minScore.setText("" + sessionMark.minPossibleMark().getScore());
+        maxScore.setText("" + sessionMark.maxPossibleMark().getScore());
     }
 
     private void restart() {

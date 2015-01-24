@@ -1,14 +1,11 @@
 package examtool.exam;
 
 import examtool.loading.QuestionLoader;
-import examtool.model.Mark;
 import examtool.model.MarkCalculator;
 import examtool.model.Question;
-import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,7 +15,6 @@ import java.util.List;
 public class ExamProvider {
 
     private final QuestionLoader questionLoader;
-
     private final MarkCalculator markCalculator;
 
     public ExamProvider(final QuestionLoader questionLoader,
@@ -27,89 +23,19 @@ public class ExamProvider {
         this.markCalculator = markCalculator;
     }
 
-    public ExamSession newSession() {
-        return new ExamSession(this);
+    public ObservableExamSession newSession() {
+        return new ObservableExamSessionImpl(
+                new ExamSessionImpl(markCalculator, getQuestionsForSession()));
     }
 
-    public final static class ExamSession {
-
-        private final MarkCalculator markCalculator;
-        private final LinkedList<Question> questionQueue;
-
-        private final List<Boolean> answersMask;
-
-        private Question currentQuestion;
-
-        private ExamSession(final ExamProvider examProvider) {
-            this.markCalculator = examProvider.markCalculator;
-
-            final List<Question> questions = getQuestionsForSession(examProvider);
-
-            this.questionQueue = new LinkedList<Question>(questions);
-
-            this.answersMask = new LinkedList<Boolean>();
-
-            moveToNextQuestion();
+    private List<Question> getQuestionsForSession() {
+        final List<QuestionLoader.StratumEntry> questionStratums = questionLoader.loadQuestions();
+        final List<Question> questions = new ArrayList<Question>();
+        for (final QuestionLoader.StratumEntry stratum : questionStratums) {
+            questions.addAll(stratum.getQuestions());
         }
-
-        private List<Question> getQuestionsForSession(ExamProvider examProvider) {
-            final List<QuestionLoader.StratumEntry> questionStratums = examProvider.questionLoader.loadQuestions();
-            final List<Question> questions = new ArrayList<Question>();
-            for (final QuestionLoader.StratumEntry stratum : questionStratums) {
-                questions.addAll(stratum.getQuestions());
-            }
-            Collections.shuffle(questions);
-            return questions;
-        }
-
-        private void moveToNextQuestion() {
-            this.currentQuestion = !questionQueue.isEmpty() ? questionQueue.pop() : null;
-        }
-
-        public Mark currentMark() {
-            return markCalculator.calculate(answersMask);
-        }
-
-        public Mark nextMark(final boolean isNextAnswerCorrect) {
-            final List<Boolean> nextAnswers = new ArrayList<Boolean>(answersMask.size() + 1);
-            nextAnswers.addAll(answersMask);
-            nextAnswers.add(isNextAnswerCorrect);
-            return markCalculator.calculate(nextAnswers);
-        }
-
-        public Mark maxMark(final boolean isNextAnswerCorrect) {
-            final List<Boolean> nextAnswers = new ArrayList<Boolean>(questionQueue.size());
-            nextAnswers.addAll(answersMask);
-            for (int i = 0; i <= questionQueue.size(); i++) {
-                nextAnswers.add(isNextAnswerCorrect);
-            }
-            return markCalculator.calculate(nextAnswers);
-        }
-
-        public Question currentQuestion() {
-            return currentQuestion;
-        }
-
-        public boolean isFinished() {
-            return currentQuestion == null;
-        }
-
-        public boolean isFinishedAheadOfTime() {
-            return currentMark().getScore() == maxMark(true).getScore();
-        }
-
-        public void answer(final boolean isAnswerCorrect) {
-            Validate.notNull(currentQuestion, "current question is null");
-            answersMask.add(isAnswerCorrect);
-            moveToNextQuestion();
-        }
-
-        public int answeredQuestionsCount() {
-            return answersMask.size();
-        }
-
-        public List<Boolean> getAnswersMask() {
-            return Collections.unmodifiableList(answersMask);
-        }
+        Collections.shuffle(questions);
+        return questions;
     }
+
 }

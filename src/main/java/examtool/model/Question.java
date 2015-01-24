@@ -6,13 +6,19 @@ package examtool.model;
 */
 public final class Question {
     private final String text;
+    private final String answer;
 
     public String getText() {
         return text;
     }
 
-    public Question(final String text) {
+    public String getAnswer() {
+        return answer;
+    }
+
+    public Question(final String text, final String answer) {
         this.text = text;
+        this.answer = answer;
     }
 
     @Override

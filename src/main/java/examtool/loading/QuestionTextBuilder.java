@@ -8,6 +8,6 @@ import examtool.model.Question;
  */
 public interface QuestionTextBuilder {
 
-    Question buildQuestion(String rawQuestionText);
+    Question buildQuestion(String rawQuestionText, String rawAnswerText);
 
 }

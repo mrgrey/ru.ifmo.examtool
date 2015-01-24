@@ -18,7 +18,8 @@ public class Main {
     public static void main(String[] args) {
         checkStartupParams(args);
         final String configFilePath = args[0];
-        final String settingsFilePath = args[1];
+        final String anwsersFilePath = args[1];
+        final String settingsFilePath = args[2];
 
         final ExamSettingsProvider settingsProvider = new FromFilesExamSettingsProvider(
                 configFilePath, settingsFilePath);
@@ -26,7 +27,7 @@ public class Main {
         final ExamSettings settings = settingsProvider.getSettings();
 
         final ExamForm form = new ExamForm(
-                new MultipleStratumQuestionLoader(configFilePath,
+                new MultipleStratumQuestionLoader(configFilePath, anwsersFilePath,
                         new QuestionWithImageTextBuilder(configFilePath)
                 ),
                 new DeferredMarkCalculator(5, new Bayes2MarkCalculator(settings))
@@ -37,7 +38,7 @@ public class Main {
     }
 
     private static void checkStartupParams(final String[] args) {
-        if (args.length != 2) {
+        if (args.length != 3) {
             System.out.println("Should run with questions path as command line argument");
             System.exit(1);
         }

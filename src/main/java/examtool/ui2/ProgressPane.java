@@ -1,6 +1,6 @@
 package examtool.ui2;
 
-import examtool.exam.ExamProvider;
+import examtool.exam.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +10,9 @@ import java.awt.*;
  * <p/>
  * 17.01.15 22:37
  */
-public class ProgressPane extends JPanel {
+public class ProgressPane extends JPanel implements ExamSessionObserver {
 
-    private ExamProvider.ExamSession examSession;
+    private ObservableExamSession examSession;
 
     private final JComponent[] answers;
 
@@ -28,9 +28,20 @@ public class ProgressPane extends JPanel {
         }
     }
 
-    public void updateAnswers() {
+    @Override
+    public void sessionChanged() {
+        final SessionState state = examSession.getState();
+        if (state == SessionState.NEW) {
+            restart();
+        } else if (state == SessionState.QUESTION_ANSWERED
+                || state == SessionState.FINISHED) {
+            updateAnswers();
+        }
+    }
+
+    private void updateAnswers() {
         int i = 0;
-        for (Boolean answer : examSession.getAnswersMask()) {
+        for (Boolean answer : examSession.getMark().getAnswersMask()) {
             final JComponent button = answers[i++];
             button.setEnabled(true);
             button.setBackground(answer ? Color.GREEN : Color.RED);
@@ -41,6 +52,7 @@ public class ProgressPane extends JPanel {
         for (JComponent answer : answers) {
             answer.setBackground(Color.GRAY);
         }
+        repaint();
     }
 
 
@@ -51,9 +63,9 @@ public class ProgressPane extends JPanel {
         return button;
     }
 
-    public void setExamSession(final ExamProvider.ExamSession examSession) {
+    public void setModel(final ObservableExamSession examSession) {
         this.examSession = examSession;
-        restart();
+        examSession.registerObserver(this);
     }
 
 }

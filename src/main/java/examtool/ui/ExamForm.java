@@ -1,9 +1,11 @@
 package examtool.ui;
 
 import examtool.exam.ExamProvider;
+import examtool.exam.ExamSession;
 import examtool.loading.QuestionLoader;
 import examtool.model.MarkCalculator;
 import examtool.model.Question;
+import examtool.exam.SessionMark;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +24,7 @@ public class ExamForm extends JDialog {
 
     private final ExamProvider examProvider;
 
-    private ExamProvider.ExamSession examSession;
+    private ExamSession examSession;
 
     private JPanel contentPane;
 
@@ -51,6 +53,7 @@ public class ExamForm extends JDialog {
         this.nextQuestionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                examSession.moveToNextQuestion();
                 renderNextQuestion();
             }
         });
@@ -74,6 +77,7 @@ public class ExamForm extends JDialog {
         this.incorrectButton.setEnabled(true);
         this.correctButton.setEnabled(true);
         this.examSession = examProvider.newSession();
+        examSession.moveToNextQuestion();
         renderNextQuestion();
     }
 
@@ -91,26 +95,28 @@ public class ExamForm extends JDialog {
 
     private void renderIntermediateScreen() {
         setButtonsVisibility(false);
+        final SessionMark sessionMark = examSession.getMark();
         this.questionPane.setText(content(
                 line("Пройдено вопросов: ",
-                        bold(Integer.toString(examSession.answeredQuestionsCount()) + getAnswersMask(examSession))
+                        bold(Integer.toString(sessionMark.getAnswersMask().size()) + getAnswersMask(examSession))
                 ),
                 line("На данный момент число баллов составляет: ",
-                        bold(Integer.toString(examSession.currentMark().getScore()))
+                        bold(Integer.toString(sessionMark.currentMark().getScore()))
                 ),
                 line("При ", bold("правильном"), " ответе на следующий вопрос число баллов составит: ",
-                        bold(Integer.toString(examSession.nextMark(true).getScore()))
+                        bold(Integer.toString(sessionMark.nextMark(true).getScore()))
                 ),
                 line("При ", bold("неправильном"), " ответе на следующий вопрос число баллов составит: ",
-                        bold(Integer.toString(examSession.nextMark(false).getScore()))
+                        bold(Integer.toString(sessionMark.nextMark(false).getScore()))
                 )
         ));
     }
 
-    private String getAnswersMask(final ExamProvider.ExamSession session) {
+    private String getAnswersMask(final ExamSession session) {
         final StringBuilder sb = new StringBuilder();
+        final SessionMark sessionMark = session.getMark();
         sb.append(" ( ");
-        for (Boolean answer : session.getAnswersMask()) {
+        for (Boolean answer : sessionMark.getAnswersMask()) {
             sb.append(answer ? "+ " : "- ");
         }
         sb.append(")");
@@ -121,9 +127,11 @@ public class ExamForm extends JDialog {
         return new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                examSession.answer(isAnswerCorrect);
+                examSession.submitAnswer(isAnswerCorrect);
 
-                final int currentScore = examSession.currentMark().getScore();
+                final SessionMark sessionMark = examSession.getMark();
+
+                final int currentScore = sessionMark.currentMark().getScore();
                 currentMarkLabel.setText(Integer.toString(currentScore));
 
                 renderIntermediateScreen();
