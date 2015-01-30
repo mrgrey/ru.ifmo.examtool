@@ -1,6 +1,5 @@
 package examtool.ui2;
 
-import examtool.exam.ExamSessionObserver;
 import examtool.exam.ObservableExamSession;
 import examtool.model.ExamSettings;
 
@@ -12,7 +11,7 @@ import java.awt.*;
  * <p/>
  * 24.01.15 21:55
  */
-public class FrameForStudent extends JFrame {
+public class FrameForStudent extends JDialog {
 
     private ObservableExamSession examSession;
 
@@ -22,10 +21,10 @@ public class FrameForStudent extends JFrame {
     private final ScorePane scorePane;
 
     public FrameForStudent(final ExamSettings examSettings) throws HeadlessException {
-        super("Приниматор экзамена");
+        super();
 
         getContentPane().setPreferredSize(new Dimension(800, 600));
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         this.questionsPane = new QuestionsPane(examSettings);
 
